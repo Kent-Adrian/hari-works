@@ -1,16 +1,18 @@
 "use client"
 
 import * as React from "react"
-import { Bell, ChevronDown, Menu, ShieldCheck } from "lucide-react"
+import { Bell, ChevronDown, LogOut, Menu, ShieldCheck } from "lucide-react"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Sidebar } from "./sidebar"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
@@ -26,7 +28,7 @@ const ROLE_HINT: Record<Role, string> = {
 }
 
 export function Topbar() {
-  const { role, setRole } = useRole()
+  const { role, setRole, signOut } = useRole()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const user = ROLE_USERS[role]
 
@@ -91,6 +93,10 @@ export function Topbar() {
                 ))}
               </DropdownMenuRadioGroup>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={signOut}>
+              <LogOut /> Sign out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

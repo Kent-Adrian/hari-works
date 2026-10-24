@@ -1,8 +1,9 @@
 "use client"
 
-// In-memory demo state shared by every screen, so an action on one screen
+// Demo state shared by every screen, so an action on one screen
 // (approve a rebag, ring up a sale) changes the numbers on the others.
-// Refreshing the browser resets the demo.
+// It is saved in this browser's localStorage, so it survives a refresh and
+// stays in sync across open tabs; "Reset demo data" restores the seed data.
 
 import * as React from "react"
 import {
@@ -174,6 +175,23 @@ const initialState = (): State => ({
   audit: structuredClone(SEED_AUDIT),
 })
 
+// Bump the version when State changes shape so old saved data is ignored
+const STORAGE_KEY = "hari-works-demo-state-v1"
+
+function loadState(): State {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) return { ...initialState(), ...JSON.parse(saved) }
+  } catch {}
+  return initialState()
+}
+
+function saveState(s: State) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s))
+  } catch {}
+}
+
 const nowTime = () => new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
 const jeId = (n: number) => `JE-${ymd(TODAY)}-${String(100 + n).padStart(4, "0")}`
 const TODAY_LABEL = fmtDate(TODAY)
@@ -342,11 +360,28 @@ type Store = State & {
 const StoreContext = React.createContext<Store | null>(null)
 
 export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = React.useState<State>(initialState)
+  const [state, setState] = React.useState<State>(loadState)
   const ref = React.useRef(state)
+  const fromOtherTab = React.useRef(false)
   React.useEffect(() => {
     ref.current = state
+    // Don't echo back a change that another tab just saved
+    if (fromOtherTab.current) fromOtherTab.current = false
+    else saveState(state)
   }, [state])
+
+  React.useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== STORAGE_KEY || !e.newValue) return
+      try {
+        const next = { ...initialState(), ...JSON.parse(e.newValue) }
+        fromOtherTab.current = true
+        setState(next)
+      } catch {}
+    }
+    window.addEventListener("storage", onStorage)
+    return () => window.removeEventListener("storage", onStorage)
+  }, [])
 
   const store = React.useMemo<Store>(() => {
     const removeApprovalFor = (s: State, rebagId: string) => s.approvals.filter((a) => a.rebagId !== rebagId)

@@ -169,13 +169,14 @@ export function Sidebar({ mobile, onNavigate }: { mobile?: boolean; onNavigate?:
         <button
           type="button"
           onClick={() => {
+            if (!window.confirm("Reset all demo data? Sales, rebagging jobs and other entries made in this browser will be cleared.")) return
             reset()
             toast.success("Demo data reset")
           }}
           className="mt-2 flex w-full items-center gap-2 rounded-md px-2 py-1 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground"
         >
           <ClipboardList className="size-3.5" />
-          Prototype · sample data
+          Prototype · Reset demo data
           <RotateCcw className="ml-auto size-3.5" />
         </button>
       </div>

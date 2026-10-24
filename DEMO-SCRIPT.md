@@ -9,9 +9,9 @@ All dates in the demo follow the real calendar: the header shows today's date an
    npm run build
    npm run start
    ```
-2. Open http://localhost:3000 in a full-screen browser window (F11). Laptop width 1366px or wider.
-3. Open a second tab at http://localhost:3000/pos so you can switch quickly.
-4. Rehearse once, then click **Reset** (bottom of the sidebar, circular arrow) or refresh the page to reset the demo data.
+2. Open http://localhost:3000 in a full-screen browser window (F11). Laptop width 1366px or wider. Sign in as **owner@hariworks.demo** / **demo123** (or click the Owner card on the login page).
+3. Open a second tab at http://localhost:3000/pos so you can switch quickly. Both tabs share the same data.
+4. Rehearse once, then click **Reset demo data** (bottom of the sidebar, circular arrow). Entries are saved in the browser, so refreshing no longer resets them.
 5. Say up front: **"This is a working prototype with sample data built from your requirements document."** Point at the sidebar: "The bright menus work today; the ones tagged Phase 1–5 are scheduled in my proposal."
 
 Demo PIN for manager approvals: **1234**
@@ -92,6 +92,7 @@ Demo PIN for manager approvals: **1234**
 - Top-right user menu → switch to **Manager**: the dashboard locks to Davao only and Accounting disappears.
 - Switch to **Cashier**: Back Office is blocked and sends them to the POS.
 - Switch back to **Owner**.
+- Each role also has its own login (see the login page), so the client can sign in as any of them.
 
 ---
 
@@ -101,11 +102,24 @@ Demo PIN for manager approvals: **1234**
 
 Then move to the cost proposal.
 
+## Letting the client try it alone
+
+Deploy the app (for example to Vercel) and send them the link with the demo accounts below. Password for all: **demo123**.
+
+| Account | Sees |
+|---|---|
+| owner@hariworks.demo | All branches, dashboards and financials |
+| admin@hariworks.demo | Full administration and approvals |
+| manager@hariworks.demo | Davao branch: inventory and rebagging |
+| cashier@hariworks.demo | General Santos POS terminal |
+
+What they enter is saved in their own browser only: it survives refreshes, but it is not shared with other devices or people. **Reset demo data** in the sidebar starts over.
+
 ## Likely questions
 
 | Question | Answer |
 |---|---|
-| Is this the real system? | It's a working prototype with sample data. The real system adds the database, logins and the remaining modules in the proposal. |
+| Is this the real system? | It's a working prototype with sample data. The demo logins and saved entries live only in this browser. The real system adds the server database, secure logins and the remaining modules in the proposal. |
 | Can we add a 5th branch? | Yes. Branches are data, not code. Adding one is a setup task, not development. |
 | FIFO or weighted average? | Both are supported. Your accountant picks before Phase 2. The demo uses weighted average. |
 | What if the internet is down for a whole day? | The POS keeps selling and queues everything; it syncs when the connection returns. |
@@ -114,5 +128,5 @@ Then move to the cost proposal.
 
 ## If something goes wrong
 
-- Refresh the page: everything resets to the starting data.
+- Click **Reset demo data** at the bottom of the sidebar: everything goes back to the starting data.
 - Sidebar menus with a **Phase** tag (Sales, Purchasing, Reports…) aren't in the prototype. Clicking one shows which proposal phase delivers it. Say: "That's in Phase 2 of the plan."

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { NativeSelect } from "@/components/ui/native-select"
 import { PRODUCTS, PRODUCT_BY_SKU, REORDER_LEVEL, toKg, type Product } from "@/lib/catalog"
+import { useRole } from "@/components/app-shell/role-context"
 import { useDemoStore, type Payment, type Sale, type SaleLine } from "@/lib/demo-store"
 import { SHIFT_OPENED, TODAY, mmdd } from "@/lib/demo-date"
 import { BRANCHES, BRANCH_BY_ID, formatNumber, formatPeso, type BranchId } from "@/lib/mock-data"
@@ -31,6 +32,7 @@ const SAMPLE_ORDER: SaleLine[] = [
 
 export function PosScreen() {
   const store = useDemoStore()
+  const { signOut } = useRole()
   const { posBranch: branch, posOffline, offlineQueue, inventory, customers } = store
   const [query, setQuery] = React.useState("")
   const [filter, setFilter] = React.useState<(typeof FILTERS)[number]>("All")
@@ -191,6 +193,9 @@ export function PosScreen() {
           <Link href="/dashboard" className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground">
             <ArrowLeft className="size-3.5" /> Back Office
           </Link>
+          <button type="button" onClick={signOut} className="rounded-md px-2 py-1 text-xs text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground">
+            Sign out
+          </button>
         </div>
       </header>
 
